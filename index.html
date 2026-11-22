@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142d4e"><link rel="manifest" href="manifest.json">
+<title>اسمارٹ ٹیلر</title>
+<style>
+:root{--navy:#142d4e;--gold:#e8b84a;--bg:#f4f6f9;--ink:#182334}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Naskh Arabic",sans-serif}
+header{background:var(--navy);color:white;padding:18px 16px 20px;border-radius:0 0 22px 22px}
+header h1{margin:0;font-size:25px}header p{margin:6px 0 0;color:#d9e2ed;font-size:13px}
+main{max-width:760px;margin:auto;padding:14px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat,.panel{background:white;border-radius:14px;padding:13px;box-shadow:0 2px 10px #142d4e0c}
+.stat b{display:block;font-size:22px;color:var(--navy)}.stat span{font-size:12px;color:#64748b}
+nav{display:flex;gap:7px;overflow:auto;margin:14px 0}
+nav button{white-space:nowrap;border:0;border-radius:10px;padding:11px 14px;background:#e3e9f0;color:var(--navy);font-weight:bold}
+nav button.active,.primary{background:var(--navy);color:white}
+h2{font-size:18px;margin:5px 0 13px}.panel{margin:10px 0}
+label{display:block;font-size:13px;margin:10px 0 5px;font-weight:bold}
+input,textarea,select{width:100%;padding:12px;border:1px solid #d6dde6;border-radius:9px;background:#fff;font-size:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+button{cursor:pointer;font-size:14px}.action{border:0;border-radius:9px;padding:11px 14px;background:#e9eef5;color:var(--navy);font-weight:bold}
+.primary{border:0;border-radius:9px;padding:13px 16px;font-weight:bold;width:100%;margin-top:14px}
+.listitem{padding:12px 0;border-bottom:1px solid #edf0f4}.listitem:last-child{border:0}
+.muted{color:#64748b;font-size:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hidden{display:none!important}.danger{color:#b42318}.pill{font-size:11px;background:#fff3d5;color:#805500;padding:4px 8px;border-radius:20px}
+footer{text-align:center;color:#788596;font-size:11px;padding:20px}
+</style></head>
+<body>
+<header><h1>اسمارٹ ٹیلر</h1><p>مردانہ کپڑوں کے ناپ، آرڈر اور ادائیگی کا ریکارڈ</p></header>
+<main>
+<div class="stats">
+ <div class="stat"><b id="customerCount">0</b><span>کل گاہک</span></div>
+ <div class="stat"><b id="orderCount">0</b><span>کل آرڈر</span></div>
+ <div class="stat"><b id="dueCount">0</b><span>باقی رقم والے</span></div>
+</div>
+<nav>
+<button class="active" data-tab="customers">گاہک</button><button data-tab="addCustomer">نیا گاہک</button><button data-tab="addOrder">نیا آرڈر</button><button data-tab="orders">آرڈرز</button><button data-tab="backup">بیک اَپ</button>
+</nav>
+<section id="customers" class="panel">
+ <h2>گاہک تلاش کریں</h2><input id="search" placeholder="نام یا موبائل نمبر لکھیں">
+ <div id="customerList"></div>
+</section>
+<section id="addCustomer" class="panel hidden">
+ <h2 id="customerFormTitle">نیا گاہک شامل کریں</h2>
+ <input type="hidden" id="editCustomerId">
+ <label>گاہک کا نام *</label><input id="cName" placeholder="مثلاً محمد احمد">
+ <label>موبائل نمبر</label><input id="cPhone" inputmode="tel" placeholder="03xxxxxxxxx">
+ <label>پتہ / نوٹ</label><textarea id="cAddress" rows="2"></textarea>
+ <h2 style="margin-top:18px">مردانہ قمیض کے ناپ (انچ)</h2>
+ <div class="grid">
+ <div><label>قمیض لمبائی</label><input id="shirtLength" type="number" step=".25"></div>
+ <div><label>چھاتی</label><input id="chest" type="number" step=".25"></div>
+ <div><label>کندھا</label><input id="shoulder" type="number" step=".25"></div>
+ <div><label>آستین</label><input id="sleeve" type="number" step=".25"></div>
+ <div><label>کالر</label><input id="collar" type="number" step=".25"></div>
+ <div><label>کف</label><input id="cuff" type="number" step=".25"></div>
+ <div><label>دامن / گھیر</label><input id="hem" type="number" step=".25"></div>
+ </div>
+ <h2 style="margin-top:18px">شلوار کے ناپ (انچ)</h2>
+ <div class="grid">
+ <div><label>شلوار لمبائی</label><input id="trouserLength" type="number" step=".25"></div>
+ <div><label>کمر</label><input id="waist" type="number" step=".25"></div>
+ <div><label>ہپ</label><input id="hip" type="number" step=".25"></div>
+ <div><label>پائنچہ</label><input id="bottom" type="number" step=".25"></div>
+ </div>
+ <label>ناپ سے متعلق اضافی ہدایات</label><textarea id="measureNote" rows="2"></textarea>
+ <button class="primary" id="saveCustomer">گاہک محفوظ کریں</button>
+</section>
+<section id="addOrder" class="panel hidden">
+ <h2>نیا آرڈر</h2>
+ <label>گاہک منتخب کریں</label><select id="orderCustomer"></select>
+ <div class="grid">
+ <div><label>آرڈر کی تاریخ</label><input id="orderDate" type="date"></div>
+ <div><label>ڈیلیوری کی تاریخ</label><input id="deliveryDate" type="date"></div>
+ <div><label>جوڑے / سوٹ کی تعداد</label><input id="quantity" type="number" min="1" value="1"></div>
+ <div><label>کل سلائی (روپے)</label><input id="total" type="number" min="0"></div>
+ <div><label>ایڈوانس (روپے)</label><input id="advance" type="number" min="0" value="0"></div>
+ <div><label>حالت</label><select id="status"><option>موصول</option><option>سلائی جاری</option><option>تیار</option><option>حوالہ کر دیا</option></select></div>
+ </div>
+ <label>آرڈر کی تفصیل</label><textarea id="orderNote" rows="2"></textarea>
+ <button class="primary" id="saveOrder">آرڈر محفوظ کریں</button>
+</section>
+<section id="orders" class="panel hidden"><h2>تمام آرڈرز</h2><div id="orderList"></div></section>
+<section id="backup" class="panel hidden">
+ <h2>ڈیٹا بیک اَپ</h2>
+ <p class="muted">ریکارڈ اس موبائل میں محفوظ رہتا ہے۔ فون تبدیل ہونے یا ڈیٹا ضائع ہونے سے بچانے کے لیے باقاعدگی سے بیک اَپ فائل بنائیں۔</p>
+ <button class="primary" id="exportBtn">بیک اَپ فائل ڈاؤن لوڈ کریں</button>
+ <label>پہلے سے موجود بیک اَپ واپس لائیں</label><input type="file" id="importFile" accept=".json,application/json">
+ <p class="muted">کلاؤڈ سنک اگلے مرحلے میں Firebase کے ذریعے شامل ہوگا؛ اس کے لیے آپ کے Google اکاؤنٹ سے مفت سیٹ اَپ درکار ہوگا۔</p>
+</section>
+<footer>اسمارٹ ٹیلر • ابتدائی ورژن</footer>
+</main>
+<script src="app.js"></script>
+</body></html>
